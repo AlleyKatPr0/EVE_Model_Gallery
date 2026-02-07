@@ -64,8 +64,6 @@ venv.bak/
 
 # EVE Online Data - Large files not to be committed
 /sde/
-sde.zip
-icons.zip
 icons_temp/
 
 # Generated static files (can be regenerated with init.py)
@@ -88,7 +86,6 @@ docs/statics/*.json
 *.cache
 
 # Build and test artifacts
-*.pyc
 htmlcov/
 .coverage
 .coverage.*
