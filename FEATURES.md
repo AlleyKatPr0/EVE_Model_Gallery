@@ -28,25 +28,25 @@ This is a fully-featured web-based 3D model viewer specifically designed for EVE
 ## Interactive Features
 
 ### Viewer Controls
-- **🔄 Auto-Rotate**: Automatic 360° rotation of models
-- **🎮 Camera Controls**: 
+- **Auto-Rotate**: Automatic 360° rotation of models
+- **Camera Controls**: 
   - Click and drag to rotate
   - Scroll to zoom in/out
   - Pan to move around the model
-- **🔆 Brightness Slider**: Adjust exposure from 0.5x to 3.0x
-- **☀️ Shadow Toggle**: Enable/disable dynamic shadows
-- **🔄 Reset View**: Return to default camera position
+- **Brightness Slider**: Adjust exposure from 0.5x to 3.0x
+- **Shadow Toggle**: Enable/disable dynamic shadows
+- **Reset View**: Return to default camera position
 
 ### Navigation
-- **📂 Hierarchical Browser**: Ships organized by category and group
-- **🔍 Search**: Find ships by name or ID
-- **🎯 Breadcrumb Trail**: Track your location in the tree
-- **📱 Mobile Support**: Touch-friendly on smartphones and tablets
+- **Hierarchical Browser**: Ships organized by category and group
+- **Search**: Find ships by name or ID
+- **Breadcrumb Trail**: Track your location in the tree
+- **Mobile Support**: Touch-friendly on smartphones and tablets
 
 ### Visual Options
-- **🌓 Theme Toggle**: Switch between dark and light modes
-- **✨ Real-time Lighting**: Dynamic lighting and shadows
-- **🎨 Material Rendering**: Accurate colors, metallicity, and roughness
+- **Theme Toggle**: Switch between dark and light modes
+- **Real-time Lighting**: Dynamic lighting and shadows
+- **Material Rendering**: Accurate colors, metallicity, and roughness
 
 ## Model Library
 
@@ -70,10 +70,10 @@ Works in all modern browsers that support:
 - Custom Elements v1
 
 Tested on:
-- ✅ Chrome/Edge (recommended)
-- ✅ Firefox
-- ✅ Safari
-- ✅ Mobile browsers (Chrome, Safari)
+- Chrome/Edge (recommended)
+- Firefox
+- Safari
+- Mobile browsers (Chrome, Safari)
 
 ## How to View
 
