@@ -8,7 +8,13 @@ function detectDevice() {
     return width >= 768;
 }
 
+// Cache for parsed hash parameters to avoid repeated parsing
+let cachedHashParams = null;
+
 function parseHashParams() {
+    if (cachedHashParams !== null) {
+        return cachedHashParams;
+    }
     const hash = window.location.hash.slice(1);
     const params = {};
     if (hash) {
@@ -19,7 +25,12 @@ function parseHashParams() {
             }
         });
     }
+    cachedHashParams = params;
     return params;
+}
+
+function invalidateHashCache() {
+    cachedHashParams = null;
 }
 
 function buildHashString(params) {
@@ -43,6 +54,7 @@ function setHashParam(key, value) {
     }
     const newHash = buildHashString(params);
     if (window.location.hash !== newHash) {
+        invalidateHashCache();
         window.location.hash = newHash;
     }
 }
@@ -55,6 +67,9 @@ function getHashParam(key) {
 function hasHashParam(key) {
     return key in parseHashParams();
 }
+
+// Listen for hash changes to invalidate cache
+window.addEventListener('hashchange', invalidateHashCache);
 
 function initLayout() {
     const isDesktop = detectDevice();
@@ -215,6 +230,22 @@ const themeToggleIcon = document.getElementById('themeToggleIcon');
 const themeToggleBtnHome = document.getElementById('themeToggleBtnHome');
 const modelLoadingSpinner = document.getElementById('modelLoadingSpinner');
 const modelLoadingProgress = document.getElementById('modelLoadingProgress');
+const shipNameDisplay = document.getElementById('shipNameDisplay');
+const copyrightFooter = document.querySelector('.copyright-footer');
+
+// Helper function to reset model viewer state
+function resetModelViewerState() {
+    if (modelLoadingSpinner) {
+        modelLoadingSpinner.classList.remove('show');
+    }
+    if (shipNameDisplay) {
+        shipNameDisplay.classList.remove('show');
+    }
+    document.title = 'EVE Model Viewer';
+    if (copyrightFooter) {
+        copyrightFooter.classList.remove('collapsed');
+    }
+}
 
 function getManualTheme() {
     return localStorage.getItem('manualTheme');
@@ -328,7 +359,6 @@ function loadModel(src, shipInfo = null, typeId = null, variantCode = null, upda
     uploadUI.style.display = 'none';
     brightnessControl.classList.add('show');
     
-    const copyrightFooter = document.querySelector('.copyright-footer');
     if (copyrightFooter) {
         copyrightFooter.classList.add('collapsed');
     }
@@ -347,7 +377,6 @@ function loadModel(src, shipInfo = null, typeId = null, variantCode = null, upda
         }
     }
     
-    const shipNameDisplay = document.getElementById('shipNameDisplay');
     if (shipNameDisplay) {
         if (shipInfo) {
             let displayName = shipInfo.name;
@@ -403,9 +432,7 @@ function loadModel(src, shipInfo = null, typeId = null, variantCode = null, upda
     }
     
     const errorHandler = (event) => {
-        if (modelLoadingSpinner) {
-            modelLoadingSpinner.classList.remove('show');
-        }
+        resetModelViewerState();
         
         let errorMessage = 'Failed to load model';
         
@@ -419,18 +446,6 @@ function loadModel(src, shipInfo = null, typeId = null, variantCode = null, upda
         
         errorTag.textContent = errorMessage;
         errorTag.classList.add('show');
-        
-        const shipNameDisplay = document.getElementById('shipNameDisplay');
-        if (shipNameDisplay) {
-            shipNameDisplay.classList.remove('show');
-        }
-        
-        document.title = 'EVE Model Viewer';
-        
-        const copyrightFooter = document.querySelector('.copyright-footer');
-        if (copyrightFooter) {
-            copyrightFooter.classList.remove('collapsed');
-        }
         
         setTimeout(() => {
             errorTag.classList.remove('show');

@@ -5,11 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EVE Model Viewer</title>
     <link rel="icon" type="image/png" href="./Shiptree.png">
-    <link rel="shortcut icon" type="image/png" href="./Shiptree.png">
     <link rel="apple-touch-icon" href="./Shiptree.png">
     <script>
-        self.ModelViewerElement = self.ModelViewerElement || {};
-        self.ModelViewerElement.meshoptDecoderLocation = './js/meshopt_decoder.js';
+        (self.ModelViewerElement = self.ModelViewerElement || {}).meshoptDecoderLocation = './js/meshopt_decoder.js';
     </script>
 
     <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"></script>
