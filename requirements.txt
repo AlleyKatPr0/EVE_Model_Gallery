@@ -1,0 +1,23 @@
+# EVE Model Gallery - Python Dependencies
+# All dependencies are from Python standard library
+# This file is provided for documentation and future compatibility
+
+# Note: This project primarily uses Python standard library modules:
+# - zipfile: For extracting SDE and icon archives
+# - sqlite3: For querying EVE SDE database files
+# - json: For generating index files
+# - pathlib: For cross-platform path handling
+# - typing: For type hints
+# - shutil: For file operations
+# - hashlib: For file deduplication
+# - re: For pattern matching in filenames
+
+# No external dependencies are currently required for Python 3.8+
+# If you need to support older Python versions or add features, 
+# uncomment and modify the following:
+
+# For enhanced progress bars (optional):
+# tqdm>=4.65.0
+
+# For alternative database operations (optional):
+# sqlalchemy>=2.0.0
