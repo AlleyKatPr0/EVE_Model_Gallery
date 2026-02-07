@@ -636,8 +636,8 @@ const infoText2 = document.getElementById('infoText2');
 const infoText3 = document.getElementById('infoText3');
 if (infoText1) {
     infoText1.innerHTML = currentLang === 'cn' 
-        ? '仓库：<a href="https://github.com/EstamelGG/EVE_Model_Gallery" target="_blank" rel="noopener noreferrer">https://github.com/EstamelGG/EVE_Model_Gallery</a> ，您可以下载、使用模型文件，但请注意：版权仍归属于CCP Game，不可商用。'
-        : 'Repository: <a href="https://github.com/EstamelGG/EVE_Model_Gallery" target="_blank" rel="noopener noreferrer">https://github.com/EstamelGG/EVE_Model_Gallery</a>. You can download and use the model files, but please note: Copyright still belongs to CCP Game, not for commercial use.';
+        ? '仓库：<a href="https://github.com/AlleyKatPr0/EVE_Model_Gallery" target="_blank" rel="noopener noreferrer">https://github.com/AlleyKatPr0/EVE_Model_Gallery</a> ，您可以下载、使用模型文件，但请注意：版权仍归属于CCP Game，不可商用。'
+        : 'Repository: <a href="https://github.com/AlleyKatPr0/EVE_Model_Gallery" target="_blank" rel="noopener noreferrer">https://github.com/AlleyKatPr0/EVE_Model_Gallery</a>. You can download and use the model files, but please note: Copyright still belongs to CCP Game, not for commercial use.';
 }
 if (infoText2) {
     infoText2.textContent = currentLang === 'cn'
