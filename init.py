@@ -74,47 +74,33 @@ class EVEDataInitializer:
         if extra_type_ids is None:
             extra_type_ids = []
         
-        # 构建查询条件：categoryID为6或65，或者type_id在额外列表中
+        # 构建统一的查询模板
+        base_query = """
+            SELECT 
+                t.type_id,
+                t.en_name,
+                t.zh_name,
+                t.categoryID,
+                t.groupID,
+                t.icon_filename,
+                c.name as category_name,
+                c.icon_filename AS category_icon_name,
+                g.name as group_name,
+                g.icon_filename AS group_icon_name
+            FROM types t
+            LEFT JOIN categories c ON t.categoryID = c.category_id
+            LEFT JOIN groups g ON t.groupID = g.group_id
+            WHERE {where_clause}
+        """
+        
+        # 构建WHERE子句和参数
         if extra_type_ids:
             placeholders = ','.join(['?'] * len(extra_type_ids))
-            query = f"""
-            SELECT 
-                t.type_id,
-                t.en_name,
-                t.zh_name,
-                t.categoryID,
-                t.groupID,
-                t.icon_filename,
-                c.name as category_name,
-                c.icon_filename AS category_icon_name,
-                g.name as group_name,
-                g.icon_filename AS group_icon_name
-            FROM types t
-            LEFT JOIN categories c ON t.categoryID = c.category_id
-            LEFT JOIN groups g ON t.groupID = g.group_id
-            WHERE (t.categoryID IN (6, 65) AND t.published = 1)
-               OR t.type_id IN ({placeholders})
-            """
-            cursor = conn.execute(query, extra_type_ids)
+            where_clause = f"(t.categoryID IN (6, 65) AND t.published = 1) OR t.type_id IN ({placeholders})"
+            cursor = conn.execute(base_query.format(where_clause=where_clause), extra_type_ids)
         else:
-            query = """
-            SELECT 
-                t.type_id,
-                t.en_name,
-                t.zh_name,
-                t.categoryID,
-                t.groupID,
-                t.icon_filename,
-                c.name as category_name,
-                c.icon_filename AS category_icon_name,
-                g.name as group_name,
-                g.icon_filename AS group_icon_name
-            FROM types t
-            LEFT JOIN categories c ON t.categoryID = c.category_id
-            LEFT JOIN groups g ON t.groupID = g.group_id
-            WHERE t.categoryID IN (6, 65) AND t.published = 1
-            """
-            cursor = conn.execute(query)
+            where_clause = "t.categoryID IN (6, 65) AND t.published = 1"
+            cursor = conn.execute(base_query.format(where_clause=where_clause))
         categories = {}
         groups = {}
         types = {}
@@ -181,6 +167,29 @@ class EVEDataInitializer:
             'icon_names': icon_names
         }
     
+    def _ensure_category_exists(self, category_map: Dict, category_id: int, categories: Dict) -> None:
+        """确保category在map中存在，如不存在则创建"""
+        if category_id not in category_map:
+            category_info = categories.get(category_id, {})
+            category_map[category_id] = {
+                'id': category_id,
+                'name': category_info.get('name', f'分类 {category_id}'),
+                'icon_name': category_info.get('icon_name'),
+                'groups': {}
+            }
+    
+    def _ensure_group_exists(self, category_map: Dict, category_id: int, group_id: int, groups: Dict) -> None:
+        """确保group在category中存在，如不存在则创建"""
+        if group_id not in category_map[category_id]['groups']:
+            group_info = groups.get(group_id, {})
+            category_map[category_id]['groups'][group_id] = {
+                'id': group_id,
+                'name': group_info.get('name', f'组 {group_id}'),
+                'icon_name': group_info.get('icon_name'),
+                'types': [],
+                'is_t3_cruiser': (group_id == 963)
+            }
+    
     def build_category_tree(self, data: Dict, model_map: Dict[int, str] = None, all_file_info: List[Dict] = None) -> list:
         """构建category -> group -> type树结构，对于group 963增加第四层variants"""
         categories = data['categories']
@@ -220,14 +229,8 @@ class EVEDataInitializer:
         for group_id, group_info in groups.items():
             category_id = group_info.get('categoryID')
             if category_id:
-                # 如果category不在map中，需要先创建（用于额外物品ID的情况）
-                if category_id not in category_map:
-                    category_map[category_id] = {
-                        'id': category_id,
-                        'name': categories.get(category_id, {}).get('name', f'分类 {category_id}'),
-                        'icon_name': categories.get(category_id, {}).get('icon_name'),
-                        'groups': {}
-                    }
+                # 使用辅助方法确保category存在
+                self._ensure_category_exists(category_map, category_id, categories)
                 # 添加group到category
                 category_map[category_id]['groups'][group_id] = {
                     'id': group_id,
@@ -243,24 +246,9 @@ class EVEDataInitializer:
             group_id = type_info.get('groupID')
             
             if category_id and group_id:
-                # 如果category不在map中，需要先创建（用于额外物品ID的情况）
-                if category_id not in category_map:
-                    category_map[category_id] = {
-                        'id': category_id,
-                        'name': categories.get(category_id, {}).get('name', f'分类 {category_id}'),
-                        'icon_name': categories.get(category_id, {}).get('icon_name'),
-                        'groups': {}
-                    }
-                
-                # 如果group不在category的groups中，需要先创建
-                if group_id not in category_map[category_id]['groups']:
-                    category_map[category_id]['groups'][group_id] = {
-                        'id': group_id,
-                        'name': groups.get(group_id, {}).get('name', f'组 {group_id}'),
-                        'icon_name': groups.get(group_id, {}).get('icon_name'),
-                        'types': [],
-                        'is_t3_cruiser': (group_id == 963)
-                    }
+                # 使用辅助方法确保category和group存在
+                self._ensure_category_exists(category_map, category_id, categories)
+                self._ensure_group_exists(category_map, category_id, group_id, groups)
                 
                 # 检查是否为group 963（T3巡洋舰）
                 is_t3_cruiser = (group_id == 963)
@@ -365,6 +353,13 @@ class EVEDataInitializer:
                 return match.group(1)
         return None
     
+    def _get_model_files(self, path: Path) -> List[Path]:
+        """获取指定目录下所有支持的模型文件"""
+        if not path.exists():
+            return []
+        model_extensions = {'.glb', '.gltf'}
+        return [f for f in path.iterdir() if f.is_file() and f.suffix.lower() in model_extensions]
+    
     def scan_models(self) -> Tuple[Dict[int, str], List[Dict]]:
         """扫描models目录，提取模型文件信息，返回模型映射和文件信息列表（包含哈希）"""
         print("扫描模型文件...")
@@ -376,12 +371,8 @@ class EVEDataInitializer:
             print(f"  警告: 模型目录不存在 {self.models_path}")
             return model_map, file_info_list
         
-        # 支持的模型文件扩展名
-        model_extensions = {'.glb', '.gltf'}
-        
-        # 获取所有模型文件
-        model_files = [f for f in self.models_path.iterdir() 
-                      if f.is_file() and f.suffix.lower() in model_extensions]
+        # 使用共享方法获取所有模型文件
+        model_files = self._get_model_files(self.models_path)
         
         print(f"  找到 {len(model_files)} 个模型文件，开始计算哈希值...")
         
@@ -440,12 +431,8 @@ class EVEDataInitializer:
             print(f"  提示: 额外模型目录不存在 {self.extra_models_path}，跳过")
             return extra_models_map, file_info_list
         
-        # 支持的模型文件扩展名
-        model_extensions = {'.glb', '.gltf'}
-        
-        # 获取所有模型文件
-        model_files = [f for f in self.extra_models_path.iterdir() 
-                      if f.is_file() and f.suffix.lower() in model_extensions]
+        # 使用共享方法获取所有模型文件
+        model_files = self._get_model_files(self.extra_models_path)
         
         print(f"  找到 {len(model_files)} 个模型文件，开始计算哈希值...")
         
