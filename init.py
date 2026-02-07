@@ -114,7 +114,7 @@ class EVEDataInitializer:
             category_id = row['categoryID']
             group_id = row['groupID']
             
-            # Collect type info (save both Chinese and English names)
+            # Collect type info (store both Chinese and English names for bilingual support in generated JSON)
             types[type_id] = {
                 'id': type_id,
                 'name': row[name_field] or row['en_name'],
@@ -642,7 +642,7 @@ class EVEDataInitializer:
             conn_en = self.connect_database("en")
             
             if not conn_zh or not conn_en:
-                print("Error: Chinese and English databases required")
+                print("Error: Both Chinese and English databases required for bilingual data generation")
                 return
             
             try:
@@ -664,11 +664,11 @@ class EVEDataInitializer:
                 # 9. Extract extra item ID list for data loading (using deduplicated mapping)
                 extra_type_ids = [tid for tid in extra_models_map.keys() if tid in combined_model_map]
                 
-                # 10. Load Chinese data
+                # 10. Load Chinese language data (for cn JSON output)
                 data_zh = self.load_data(conn_zh, 'zh', extra_type_ids)
                 tree_zh = self.build_category_tree(data_zh, combined_model_map, all_file_info)
                 
-                # 11. Load English data
+                # 11. Load English language data (for en JSON output)
                 data_en = self.load_data(conn_en, 'en', extra_type_ids)
                 tree_en = self.build_category_tree(data_en, combined_model_map, all_file_info)
                 
