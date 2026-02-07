@@ -169,7 +169,7 @@ function initDrawer() {
     drawerOverlay.addEventListener('click', closeDrawer);
 
     if (modelSelectorBtnText) {
-        modelSelectorBtnText.textContent = currentLang === 'cn' ? '选择模型' : 'Select Model';
+        modelSelectorBtnText.textContent = 'Select Model';
     }
 }
 
@@ -299,8 +299,8 @@ function toggleTheme() {
     }
     
     const message = newTheme === 'dark' 
-        ? (currentLang === 'cn' ? '已切换到深色模式' : 'Switched to dark mode')
-        : (currentLang === 'cn' ? '已切换到浅色模式' : 'Switched to light mode');
+        ? ('Switched to dark mode')
+        : ('Switched to light mode');
     showActionToast(message);
     
     if (navigator.vibrate) navigator.vibrate(10);
@@ -587,8 +587,8 @@ function toggleShadow() {
     applyShadowState(newEnabled);
     
     const message = newEnabled 
-        ? (currentLang === 'cn' ? '阴影已开启' : 'Shadows enabled')
-        : (currentLang === 'cn' ? '阴影已关闭' : 'Shadows disabled');
+        ? ('Shadows enabled')
+        : ('Shadows disabled');
     showActionToast(message);
     
     if (navigator.vibrate) navigator.vibrate(10);
@@ -628,36 +628,30 @@ if (document.readyState === 'loading') {
 }
 
 if (hintText) {
-    hintText.textContent = currentLang === 'cn' ? '从目录中选择模型' : 'Select a model from the directory';
+    hintText.textContent = 'Select a model from the directory';
 }
 
 const infoText1 = document.getElementById('infoText1');
 const infoText2 = document.getElementById('infoText2');
 const infoText3 = document.getElementById('infoText3');
 if (infoText1) {
-    infoText1.innerHTML = currentLang === 'cn' 
-        ? '仓库：<a href="https://github.com/AlleyKatPr0/EVE_Model_Gallery" target="_blank" rel="noopener noreferrer">https://github.com/AlleyKatPr0/EVE_Model_Gallery</a> ，您可以下载、使用模型文件，但请注意：版权仍归属于CCP Game，不可商用。'
-        : 'Repository: <a href="https://github.com/AlleyKatPr0/EVE_Model_Gallery" target="_blank" rel="noopener noreferrer">https://github.com/AlleyKatPr0/EVE_Model_Gallery</a>. You can download and use the model files, but please note: Copyright still belongs to CCP Game, not for commercial use.';
+    infoText1.innerHTML = 'Repository: <a href="https://github.com/AlleyKatPr0/EVE_Model_Gallery" target="_blank" rel="noopener noreferrer">https://github.com/AlleyKatPr0/EVE_Model_Gallery</a>. You can download and use the model files, but please note: Copyright still belongs to CCP Game, not for commercial use.';
 }
 if (infoText2) {
-    infoText2.textContent = currentLang === 'cn'
-        ? '我们只对游戏内物品颜色、金属度、粗糙度、纹理进行了力所能及的还原，仍有大量缺失的细节，渲染效果与游戏内的实际呈现效果不完全一致，请仅作参考。'
-        : 'We have only restored the color, metallicity, roughness, and textures of in-game items to the best of our ability. There are still many missing details, and the rendering effects may not be completely consistent with the actual in-game presentation. Please use for reference only.';
+    infoText2.textContent = 'We have only restored the color, metallicity, roughness, and textures of in-game items to the best of our ability. There are still many missing details, and the rendering effects may not be completely consistent with the actual in-game presentation. Please use for reference only.';
 }
 if (infoText3) {
-    infoText3.textContent = currentLang === 'cn'
-        ? '我们建议移动端设备使用谷歌浏览器访问，以获得更好的体验。'
-        : 'We recommend using Google Chrome on mobile devices for a better experience.';
+    infoText3.textContent = 'We recommend using Google Chrome on mobile devices for a better experience.';
 }
 
 const modelSelectorBtnText = document.getElementById('modelSelectorBtnText');
 if (modelSelectorBtnText) {
-    modelSelectorBtnText.textContent = currentLang === 'cn' ? '选择模型' : 'Select Model';
+    modelSelectorBtnText.textContent = 'Select Model';
 }
 
 const loadingText = document.getElementById('loadingText');
 if (loadingText) {
-    loadingText.textContent = currentLang === 'cn' ? '加载中...' : 'Loading...';
+    loadingText.textContent = 'Loading...';
 }
 
 function getIconPath(iconName) {
@@ -1196,18 +1190,18 @@ class NavigationManager {
         const shipInfo = this.path[this.path.length - 1];
         const shipId = shipInfo.id;
         
-        // 从 URL 获取当前选中的变体
+        // Get currently selected variant from URL
         const currentVariantCode = getHashParam('variant');
         const currentTypeId = parseInt(getHashParam('typeid'), 10);
         
-        // 判断是否需要自动加载第一个变体（当导航到变体列表时）
+        // Determine if we should auto-load the first variant (when navigating to variant list)
         const shouldAutoLoad = currentTypeId !== shipId || !currentVariantCode;
 
         variants.forEach((variant, index) => {
             const item = document.createElement('li');
             item.className = 'variant-item';
             
-            // 如果是URL指定的变体或第一个变体（没有URL参数时），自动选中
+            // Auto-select if it's the URL-specified variant or first variant (when no URL param)
             const shouldActivate = currentVariantCode 
                 ? variant.variant_code === currentVariantCode 
                 : index === 0;
@@ -1215,7 +1209,7 @@ class NavigationManager {
             if (shouldActivate) {
                 item.classList.add('active');
                 
-                // 自动加载第一个变体的模型（当用户手动导航到变体列表时）
+                // Auto-load the first variant's model (when user manually navigates to variant list)
                 if (shouldAutoLoad && index === 0 && variant.model_path) {
                     setTimeout(() => {
                         loadModel(variant.model_path, {
@@ -1275,7 +1269,7 @@ function buildSearchIndex(data) {
                 if (group.types) {
                     group.types.forEach(type => {
                         if (type.has_variants && type.variants && type.variants.length > 0) {
-                            // 为有变体的类型添加主条目（使用默认模型）
+                            // Add main entry for types with variants (using default model)
                             index.push({
                                 id: type.id,
                                 name: type.name,
@@ -1291,9 +1285,9 @@ function buildSearchIndex(data) {
                                 groupName: group.name
                             });
                             
-                            // 也为每个变体创建条目，方便搜索具体变体
+                            // Also create entries for each variant to facilitate searching specific variants
                             type.variants.forEach(variant => {
-                                // 只为有变体代码的创建单独条目
+                                // Only create separate entries for variants with codes
                                 if (variant.variant_code) {
                                     index.push({
                                         id: type.id,
@@ -1343,12 +1337,12 @@ function findTypeById(data, typeId, variantCode = null) {
                         if (type.id === typeId) {
                             let selectedVariant = null;
                             
-                            // 只有指定了 variantCode 时才查找变体
+                            // Only search for variant when variantCode is specified
                             if (variantCode && type.has_variants && type.variants && type.variants.length > 0) {
                                 selectedVariant = type.variants.find(v => v.variant_code === variantCode);
                             }
                             
-                            // 返回结果
+                            // Return result
                             return {
                                 type: type,
                                 variant: selectedVariant,
@@ -1387,10 +1381,10 @@ function loadModelFromHash() {
         return;
     }
     
-    // 如果指定了变体参数
+    // If variant parameter is specified
     let modelPath, shipInfo, actualVariantCode;
     if (variantCode) {
-        // 如果指定了变体但没找到，显示错误
+        // Show error if variant specified but not found
         if (!result.variant) {
             showModelNotFoundError();
             return;
@@ -1403,7 +1397,7 @@ function loadModelFromHash() {
         };
         actualVariantCode = result.variant.variant_code || null;
     } else {
-        // 没有指定变体参数，使用默认模型
+        // No variant parameter specified, use default model
         modelPath = result.type.model_path;
         shipInfo = {
             name: result.type.name,
@@ -1422,7 +1416,7 @@ function loadModelFromHash() {
 }
 
 function showModelNotFoundError() {
-    const errorMessage = currentLang === 'cn' ? '模型不存在' : 'Model not found';
+    const errorMessage = 'Model not found';
     errorTag.textContent = errorMessage;
     errorTag.classList.add('show');
     setTimeout(() => {
@@ -1452,7 +1446,7 @@ function renderSearchResults(results, searchResultsContainer, navManager) {
         const noResults = document.createElement('div');
         noResults.className = 'search-result-item';
         noResults.style.cursor = 'default';
-        noResults.textContent = currentLang === 'cn' ? '未找到结果' : 'No results found';
+        noResults.textContent = 'No results found';
         searchResultsContainer.appendChild(noResults);
         return;
     }
@@ -1547,7 +1541,7 @@ function initSearchBox(searchInputId, searchBoxId, navManager) {
     const navContent = navManager.container;
     if (!navContent) return;
     
-    searchInput.placeholder = currentLang === 'cn' ? '搜索飞船名称或ID...' : 'Search ship name or ID...';
+    searchInput.placeholder = 'Search ship name or ID...';
     
     let searchResultsContainer = searchBox.querySelector('.search-results');
     if (!searchResultsContainer) {
@@ -1644,11 +1638,11 @@ fetch(indexFile)
         if (!response.ok) {
             throw new Error(`Failed to load index file: ${response.statusText}`);
         }
-        updateLoadingText(currentLang === 'cn' ? '加载数据中...' : 'Loading data...');
+        updateLoadingText('Loading data...');
         return response.json();
     })
     .then(data => {
-        updateLoadingText(currentLang === 'cn' ? '准备目录...' : 'Preparing directory...');
+        updateLoadingText('Preparing directory...');
         resourcesIndex = data;
         navManager = new NavigationManager(data, 'navContent', 'breadcrumb');
         const breadcrumbMobile = document.getElementById('breadcrumbMobile');
@@ -1668,7 +1662,7 @@ fetch(indexFile)
     .catch(error => {
         const loadingText = document.getElementById('loadingText');
         if (loadingText) {
-            loadingText.textContent = currentLang === 'cn' ? '加载失败' : 'Loading failed';
+            loadingText.textContent = 'Loading failed';
         }
         
         setTimeout(() => {
@@ -1706,20 +1700,20 @@ function showActionToast(message) {
 }
 
 if (autoRotateToggleIcon) {
-    autoRotateToggleIcon.setAttribute('title', currentLang === 'cn' ? '关闭自动旋转' : 'Stop auto-rotate');
+    autoRotateToggleIcon.setAttribute('title', 'Stop auto-rotate');
     autoRotateToggleIcon.addEventListener('click', () => {
         const isOn = modelViewer.autoRotate;
         modelViewer.autoRotate = !isOn;
         if (modelViewer.autoRotate) {
             autoRotateToggleIcon.classList.remove('active');
-            autoRotateToggleIcon.setAttribute('title', currentLang === 'cn' ? '关闭自动旋转' : 'Stop auto-rotate');
+            autoRotateToggleIcon.setAttribute('title', 'Stop auto-rotate');
         } else {
             autoRotateToggleIcon.classList.add('active');
-            autoRotateToggleIcon.setAttribute('title', currentLang === 'cn' ? '开启自动旋转' : 'Start auto-rotate');
+            autoRotateToggleIcon.setAttribute('title', 'Start auto-rotate');
         }
         showActionToast(modelViewer.autoRotate
-            ? (currentLang === 'cn' ? '已开启自动旋转' : 'Auto-rotate on')
-            : (currentLang === 'cn' ? '已关闭自动旋转' : 'Auto-rotate off'));
+            ? ('Auto-rotate on')
+            : ('Auto-rotate off'));
         if (navigator.vibrate) navigator.vibrate(10);
     });
 }
@@ -1741,7 +1735,7 @@ resetViewIcon.addEventListener('click', () => {
     modelViewer.exposure = initialExposure;
     brightnessSlider.value = initialExposure;
 
-    showActionToast(currentLang === 'cn' ? '已重置视角' : 'View reset');
+    showActionToast('View reset');
     
     if (navigator.vibrate) navigator.vibrate(10);
 });
