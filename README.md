@@ -4,7 +4,7 @@ A web-based 3D model viewer for EVE Online ships and structures, featuring an in
 
 ![EVE Model Gallery](docs/Shiptree.png)
 
-## 🚀 Features
+##  Features
 
 - **Interactive 3D Model Viewer**: View EVE Online ship models in your browser using model-viewer
 - **Multi-Language Support**: Fully localized in English and Chinese (中文)
@@ -15,14 +15,14 @@ A web-based 3D model viewer for EVE Online ships and structures, featuring an in
 - **Search Functionality**: Quick search across all ship types and categories
 - **Responsive Design**: Glass-morphism UI with theme toggling and mobile-friendly layout
 
-## 📋 Requirements
+##  Requirements
 
 - Python 3.8 or higher
 - Modern web browser with WebGL support
 - EVE Online Static Data Export (SDE) files
 - Icon assets from EVE Online
 
-## 🛠️ Installation
+##  Installation
 
 1. **Clone the repository**
    ```bash
@@ -57,7 +57,7 @@ A web-based 3D model viewer for EVE Online ships and structures, featuring an in
    - Extract required icons to the statics directory
    - Deduplicate models based on file hashes
 
-## 📖 Usage
+##  Usage
 
 ### Running the Viewer
 
@@ -78,7 +78,7 @@ Model files should follow this naming pattern:
 - T3 Cruisers with variants: `{type_id}_{ship_name}{variant_code}_suffix.glb`
   - Example: `29984_Tengu2312_caldaribase_lite.glb` (variant code: 2312)
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 EVE_Model_Gallery/
@@ -104,7 +104,7 @@ EVE_Model_Gallery/
     └── type_default.png   # Default type icon
 ```
 
-## 🔧 Configuration
+##  Configuration
 
 The `init.py` script can be customized by modifying the `EVEDataInitializer` class:
 - Change output paths
@@ -112,35 +112,25 @@ The `init.py` script can be customized by modifying the `EVEDataInitializer` cla
 - Adjust icon extraction logic
 - Customize the tree building algorithm
 
-## 🎨 Blender Integration
+##  Blender Integration
 
 This project is based on **Blender 5.0**. If you want to bake or edit the models yourself, you can access the source Blender projects:
 
 [Dropbox - Blender Projects](https://www.dropbox.com/scl/fo/erlilx1z22cha2le712yi/AO8Tmpg0vxFoReBkYoMGIns?rlkey=4nrbqup4lyfhr2t9mvqevi54p&st=o5rgi9y5&dl=0)
 
-## 🙏 Credits & References
+##  Credits & References
 
 This project is based on the excellent work by **Ondřej Janíček**:
 - [Release_EVE_Online_Ship_shader_.rar](https://onedrive.live.com/?id=5F4AD5A3DD3EC4D9%217994&cid=5F4AD5A3DD3EC4D9&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3UvYy81ZjRhZDVhM2RkM2VjNGQ5L0VkbkVQdDJqMVVvZ2dGODZId0FBQUFBQmVJaldxdXhhSGZEV0NSNnNfazg0c1E%5FZT1pUXVEZ3Y&parId=5F4AD5A3DD3EC4D9%21se3d4ac861dac4443b1dca5ae0625e466&o=OneUp)
 
-**Special thanks to:**
-- The **EVE Creative** community for all the help and shared resources
-- CCP Games for EVE Online and the Static Data Export
-- The model-viewer team for the excellent 3D viewer component
-
-## 📱 Related Projects
-
-**Tritanium** - EVE Online companion app for iOS:
-- [App Store Link](https://apps.apple.com/us/app/tritanium/id6739530875)
-
-## 📄 License
+##  License
 
 This project uses assets and data from EVE Online, which are owned by CCP Games. Please refer to [CCP's Developer License Agreement](https://developers.eveonline.com/resource/license-agreement) for usage terms.
 
-## 🤝 Contributing
+##  Contributing
 
 Contributions are welcome! Please feel free to submit pull requests or open issues for bugs and feature requests.
 
-## 📮 Support
+##  Support
 
 For questions, issues, or suggestions, please open an issue on GitHub or contact the maintainer.
